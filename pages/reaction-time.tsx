@@ -1,3 +1,4 @@
+import { NextSeo } from 'next-seo';
 import { useEffect, useState } from 'react';
 import styles from 'styles/ReactionTime.module.scss';
 import { classes } from 'utils';
@@ -41,47 +42,50 @@ const ReactionTime = () => {
         }
     };
     return (
-        <div className={styles.center}>
-            <div className={styles.container}>
-                <button
-                    className={classes([
-                        styles.click,
-                        canClick ? styles.active : null,
-                    ])}
-                    onMouseDown={handleClick}
-                    tabIndex={-1}
-                >
-                    {running ? (
-                        canClick ? (
-                            <h1>Click!</h1>
+        <>
+            <NextSeo title="Reaction Time Test" />
+            <div className={styles.center}>
+                <div className={styles.container}>
+                    <button
+                        className={classes([
+                            styles.click,
+                            canClick ? styles.active : null,
+                        ])}
+                        onMouseDown={handleClick}
+                        tabIndex={-1}
+                    >
+                        {running ? (
+                            canClick ? (
+                                <h1>Click!</h1>
+                            ) : (
+                                <h1>Wait for green</h1>
+                            )
+                        ) : tooSoon ? (
+                            <>
+                                <h1>Too soon!</h1>
+                                <h3>Click to try again</h3>
+                            </>
+                        ) : !whenGreen ? (
+                            <>
+                                <h1>Reaction Time Test</h1>
+                                <h3>
+                                    Click this button as fast as you can when it
+                                    turns green.
+                                </h3>
+                            </>
                         ) : (
-                            <h1>Wait for green</h1>
-                        )
-                    ) : tooSoon ? (
-                        <>
-                            <h1>Too soon!</h1>
-                            <h3>Click to try again</h3>
-                        </>
-                    ) : !whenGreen ? (
-                        <>
-                            <h1>Reaction Time Test</h1>
-                            <h3>
-                                Click this button as fast as you can when it
-                                turns green.
-                            </h3>
-                        </>
-                    ) : (
-                        <>
-                            <h1>
-                                {Date.now() - whenGreen}
-                                ms
-                            </h1>
-                            <h3>Click to try again</h3>
-                        </>
-                    )}
-                </button>
+                            <>
+                                <h1>
+                                    {Date.now() - whenGreen}
+                                    ms
+                                </h1>
+                                <h3>Click to try again</h3>
+                            </>
+                        )}
+                    </button>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 
