@@ -1,0 +1,19 @@
+$bg: #030304;
+$bglight: #0e0e13;
+$accent: #6600ff;
+$secondary: #ffe900;
+
+@function rtp($rems) {
+    @return ($rems * 16) + px;
+}
+
+@mixin wh($size) {
+    width: $size;
+    height: $size;
+}
+
+@mixin grid-center {
+    display: grid;
+    place-items: center;
+    align-content: center;
+}

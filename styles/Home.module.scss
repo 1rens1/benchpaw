@@ -1,0 +1,43 @@
+.center {
+    @include grid-center;
+    min-height: 100vh;
+    background-image: url(/background-dots.svg);
+}
+
+.container {
+    padding: rtp(1);
+    font-size: clamp(1.2em, 4vw, 2em);
+}
+
+.title {
+    font-weight: 900;
+    color: $accent;
+    line-height: 0.6em;
+    margin-bottom: 0.2em;
+    .secondary {
+        display: inline-block;
+        color: $secondary;
+    }
+    text-shadow: 1px -1px #f00;
+    animation: trippy 10s linear infinite;
+    @keyframes trippy {
+        0% {
+            text-shadow: 1px -1px #f00;
+        }
+        20% {
+            text-shadow: -1px -1px #f00;
+        }
+        40% {
+            text-shadow: -1px 1px #f00;
+        }
+        80% {
+            text-shadow: 1px 1px #f00;
+        }
+        100% {
+            text-shadow: 1px -1px #f00;
+        }
+    }
+}
+.subtitle {
+    font-weight: 900;
+}

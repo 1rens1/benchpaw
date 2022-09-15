@@ -1,0 +1,36 @@
+$nav-bg: lighten($bg, 15);
+
+.toggleButton {
+    @include grid-center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    $width: 20px;
+    height: rtp(3);
+    width: $width;
+    padding: 0;
+    font: inherit;
+    background-color: $nav-bg;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        height: $width;
+        width: 100%;
+        transform: translateY(100%) scaleY(0.5);
+        transform-origin: top;
+        background-image: linear-gradient(-45deg, transparent 50%, $nav-bg 50%);
+    }
+    .arrow {
+        transition: transform 0.2s ease-in-out;
+    }
+    &.opened {
+        .arrow {
+            transform: rotate(180deg);
+        }
+    }
+}
