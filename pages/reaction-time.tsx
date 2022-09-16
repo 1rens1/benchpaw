@@ -3,44 +3,61 @@ import { useEffect, useState } from 'react';
 import styles from 'styles/ReactionTime.module.scss';
 import { classes } from 'utils';
 
+const GameState = [
+    'Initial',
+    'Waiting',
+    'CanClick',
+    'Result',
+    'TooSoon',
+] as const;
+
 const ReactionTime = () => {
-    const [running, setRunning] = useState(false);
-    const [canClick, setCanClick] = useState(false);
-    const [whenGreen, setWhenGreen] = useState<number>();
-    const [tooSoon, setTooSoon] = useState(false);
+    const [gameState, setGameState] =
+        useState<typeof GameState[number]>('Initial');
 
-    const [canClickTimeout, setCanClickTimeout] = useState<any>();
+    const [waitingTimeout, setWaitingTimeout] = useState<NodeJS.Timeout>();
+    const clearWaitingTimeout = () => clearTimeout(waitingTimeout);
 
-    const getRandomInt = (min: number, max: number) => {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    };
+    const [whenCanClick, setWhenCanClick] = useState(0);
+    const [reactionTime, setReactionTime] = useState(0);
 
     const handleClick = () => {
-        if (!running) {
-            const t = getRandomInt(2000, 5000);
-            console.log(t);
+        const runGame = () => {
+            const getRandomDelay = () => {
+                let min = 2000;
+                let max = 5000;
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            };
 
-            setRunning(true);
-            setTooSoon(false);
-            setCanClickTimeout(
+            setGameState('Waiting');
+            setWaitingTimeout(
                 setTimeout(() => {
-                    setCanClick(true);
-                    setWhenGreen(Date.now());
-                }, t)
+                    setGameState('CanClick');
+                    setWhenCanClick(Date.now());
+                }, getRandomDelay())
             );
-        } else {
-            setRunning(false);
-            setCanClick(false);
-            if (canClick) {
-                setRunning(false);
-            } else {
-                setTooSoon(true);
-                clearTimeout(canClickTimeout);
-            }
+        };
+
+        switch (gameState) {
+            case 'Initial':
+            case 'Result':
+            case 'TooSoon':
+                runGame();
+                break;
+            case 'Waiting':
+                setGameState('TooSoon');
+                clearWaitingTimeout();
+                break;
+            case 'CanClick':
+                setReactionTime(Date.now() - whenCanClick);
+                setGameState('Result');
+                break;
         }
     };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => clearWaitingTimeout, []);
+
     return (
         <>
             <NextSeo title="Reaction Time Test" />
@@ -49,23 +66,12 @@ const ReactionTime = () => {
                     <button
                         className={classes([
                             styles.click,
-                            canClick ? styles.active : null,
+                            gameState === 'CanClick' ? styles.active : null,
                         ])}
                         onMouseDown={handleClick}
                         tabIndex={-1}
                     >
-                        {running ? (
-                            canClick ? (
-                                <h1>Click!</h1>
-                            ) : (
-                                <h1>Wait for green</h1>
-                            )
-                        ) : tooSoon ? (
-                            <>
-                                <h1>Too soon!</h1>
-                                <h3>Click to try again</h3>
-                            </>
-                        ) : !whenGreen ? (
+                        {gameState === 'Initial' && (
                             <>
                                 <h1>Reaction Time Test</h1>
                                 <h3>
@@ -73,13 +79,18 @@ const ReactionTime = () => {
                                     turns green.
                                 </h3>
                             </>
-                        ) : (
+                        )}
+                        {gameState === 'Waiting' && <h1>Wait for green</h1>}
+                        {gameState === 'CanClick' && <h1>Click!</h1>}
+                        {(gameState === 'Result' ||
+                            gameState === 'TooSoon') && (
                             <>
                                 <h1>
-                                    {Date.now() - whenGreen}
-                                    ms
+                                    {gameState === 'Result'
+                                        ? reactionTime + 'ms'
+                                        : 'Too soon!'}
                                 </h1>
-                                <h3>Click to try again</h3>
+                                <h3>Click to try again.</h3>
                             </>
                         )}
                     </button>
