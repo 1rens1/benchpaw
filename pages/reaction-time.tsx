@@ -1,3 +1,4 @@
+import Checkbox from 'components/Checkbox';
 import { NextSeo } from 'next-seo';
 import { useEffect, useState } from 'react';
 import styles from 'styles/ReactionTime.module.scss';
@@ -16,10 +17,15 @@ const ReactionTime = () => {
         useState<typeof GameState[number]>('Initial');
 
     const [waitingTimeout, setWaitingTimeout] = useState<NodeJS.Timeout>();
+    const [waitingDelay, setWaitingDelay] = useState(0);
     const clearWaitingTimeout = () => clearTimeout(waitingTimeout);
 
     const [whenCanClick, setWhenCanClick] = useState(0);
     const [reactionTime, setReactionTime] = useState(0);
+
+    const [cheats, setCheats] = useState({
+        delayProgress: false,
+    });
 
     const handleClick = () => {
         const runGame = () => {
@@ -30,11 +36,14 @@ const ReactionTime = () => {
             };
 
             setGameState('Waiting');
+
+            const delay = getRandomDelay();
+            setWaitingDelay(delay);
             setWaitingTimeout(
                 setTimeout(() => {
                     setGameState('CanClick');
                     setWhenCanClick(Date.now());
-                }, getRandomDelay())
+                }, delay)
             );
         };
 
@@ -68,7 +77,7 @@ const ReactionTime = () => {
                             styles.click,
                             gameState === 'CanClick' ? styles.active : null,
                         ])}
-                        onMouseDown={handleClick}
+                        onMouseDown={(e) => e.button === 0 && handleClick()}
                         tabIndex={-1}
                     >
                         {gameState === 'Initial' && (
@@ -87,13 +96,42 @@ const ReactionTime = () => {
                             <>
                                 <h1>
                                     {gameState === 'Result'
-                                        ? reactionTime + 'ms'
+                                        ? (reactionTime < 200 ? '⚡ ' : '') +
+                                          reactionTime +
+                                          'ms'
                                         : 'Too soon!'}
                                 </h1>
                                 <h3>Click to try again.</h3>
                             </>
                         )}
+
+                        {cheats.delayProgress && gameState === 'Waiting' && (
+                            <div className={classes([styles.waitBar])}>
+                                <div
+                                    className={styles.waitBarInner}
+                                    style={{
+                                        animationDuration: waitingDelay + 'ms',
+                                    }}
+                                />
+                            </div>
+                        )}
                     </button>
+                </div>
+                <div className={styles.container}>
+                    <h4 style={{ marginBottom: 4 }}>Cheats</h4>
+                    <Checkbox
+                        checked={cheats.delayProgress}
+                        disabled={
+                            gameState === 'Waiting' || gameState === 'CanClick'
+                        }
+                        onChange={({ currentTarget: t }) =>
+                            setCheats((c) => ({
+                                ...c,
+                                delayProgress: t.checked,
+                            }))
+                        }
+                        label="Show delay progress bar"
+                    />
                 </div>
             </div>
         </>

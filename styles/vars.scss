@@ -1,5 +1,6 @@
 $bg: #030304;
 $bglight: #0e0e13;
+$border: #222224;
 $accent: #6600ff;
 $secondary: #ffe900;
 
@@ -16,4 +17,10 @@ $secondary: #ffe900;
     display: grid;
     place-items: center;
     align-content: center;
+}
+
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
