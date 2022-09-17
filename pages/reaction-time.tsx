@@ -1,6 +1,7 @@
 import Checkbox from 'components/Checkbox';
 import { NextSeo } from 'next-seo';
 import { useEffect, useState } from 'react';
+import { BsChevronDown, BsChevronRight } from 'react-icons/bs';
 import styles from 'styles/ReactionTime.module.scss';
 import { classes } from 'utils';
 
@@ -23,6 +24,7 @@ const ReactionTime = () => {
     const [whenCanClick, setWhenCanClick] = useState(0);
     const [reactionTime, setReactionTime] = useState(0);
 
+    const [showCheats, setShowCheats] = useState(false);
     const [cheats, setCheats] = useState({
         delayProgress: false,
     });
@@ -118,20 +120,36 @@ const ReactionTime = () => {
                     </button>
                 </div>
                 <div className={styles.container}>
-                    <h4 style={{ marginBottom: 4 }}>Cheats</h4>
-                    <Checkbox
-                        checked={cheats.delayProgress}
-                        disabled={
-                            gameState === 'Waiting' || gameState === 'CanClick'
-                        }
-                        onChange={({ currentTarget: t }) =>
-                            setCheats((c) => ({
-                                ...c,
-                                delayProgress: t.checked,
-                            }))
-                        }
-                        label="Show delay progress bar"
-                    />
+                    <h4
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 4,
+                            cursor: 'default',
+                        }}
+                        onClick={() => setShowCheats((v) => !v)}
+                    >
+                        {showCheats ? <BsChevronDown /> : <BsChevronRight />}{' '}
+                        Cheats
+                    </h4>
+                    {showCheats && (
+                        <div style={{ marginTop: 8 }}>
+                            <Checkbox
+                                checked={cheats.delayProgress}
+                                disabled={
+                                    gameState === 'Waiting' ||
+                                    gameState === 'CanClick'
+                                }
+                                onChange={({ currentTarget: t }) =>
+                                    setCheats((c) => ({
+                                        ...c,
+                                        delayProgress: t.checked,
+                                    }))
+                                }
+                                label="Show delay progress bar"
+                            />
+                        </div>
+                    )}
                 </div>
             </div>
         </>
