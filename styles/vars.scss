@@ -24,3 +24,8 @@ $secondary: #ffe900;
     align-items: center;
     justify-content: center;
 }
+
+@mixin dot-grid {
+    background-image: url(/background-dots.svg);
+    background-position: 10px 10px;
+}

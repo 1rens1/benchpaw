@@ -1,0 +1,33 @@
+.center {
+    @include dot-grid;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: rtp(2) rtp(1);
+    gap: rtp(1);
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: rtp(1);
+    background-color: lighten($bg, 10);
+    border-radius: 4px;
+    box-shadow: 0 2px 4px #000;
+}
+
+.bigButton {
+    position: relative;
+    background-color: $accent;
+    border: none;
+    border-radius: 4px;
+    width: 100%;
+    min-height: 300px;
+    cursor: pointer;
+    padding: rtp(1);
+    h1 {
+        font-weight: 900;
+    }
+}

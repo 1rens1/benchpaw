@@ -1,13 +1,16 @@
-import 'styles/globals.scss';
+import Navbar from 'components/Navbar';
 import { DefaultSeo } from 'next-seo';
 import type { AppProps } from 'next/app';
-import Navbar from 'components/Navbar';
-import { useState } from 'react';
+import 'styles/globals.scss';
 
 const App = ({ Component, pageProps }: AppProps) => {
     return (
         <>
-            <DefaultSeo defaultTitle="benchpaw" titleTemplate="%s | benchpaw" />
+            <DefaultSeo
+                defaultTitle="benchpaw"
+                titleTemplate="%s | benchpaw"
+                description="games for your brains"
+            />
             <Navbar />
             <Component {...pageProps} />
         </>

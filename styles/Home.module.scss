@@ -1,7 +1,7 @@
 .center {
     @include grid-center;
+    @include dot-grid;
     min-height: 100vh;
-    background-image: url(/background-dots.svg);
 }
 
 .container {
@@ -15,26 +15,26 @@
     line-height: 0.6em;
     margin-bottom: 0.2em;
     .secondary {
-        display: inline-block;
         color: $secondary;
     }
-    text-shadow: 1px -1px #f00;
+    $ts-color: #f00;
+    text-shadow: 1px -1px $ts-color;
     animation: trippy 10s linear infinite;
     @keyframes trippy {
         0% {
-            text-shadow: 1px -1px #f00;
+            text-shadow: 1px -1px $ts-color;
         }
         20% {
-            text-shadow: -1px -1px #f00;
+            text-shadow: -1px -1px $ts-color;
         }
         40% {
-            text-shadow: -1px 1px #f00;
+            text-shadow: -1px 1px $ts-color;
         }
         80% {
-            text-shadow: 1px 1px #f00;
+            text-shadow: 1px 1px $ts-color;
         }
         100% {
-            text-shadow: 1px -1px #f00;
+            text-shadow: 1px -1px $ts-color;
         }
     }
 }

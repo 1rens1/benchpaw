@@ -1,8 +1,9 @@
+import Accordion from 'components/Accordion';
 import Checkbox from 'components/Checkbox';
 import { NextSeo } from 'next-seo';
 import { useEffect, useState } from 'react';
-import { BsChevronDown, BsChevronRight } from 'react-icons/bs';
 import styles from 'styles/ReactionTime.module.scss';
+import defStyles from 'styles/TestDefaults.module.scss';
 import { classes } from 'utils';
 
 const GameState = [
@@ -24,7 +25,6 @@ const ReactionTime = () => {
     const [whenCanClick, setWhenCanClick] = useState(0);
     const [reactionTime, setReactionTime] = useState(0);
 
-    const [showCheats, setShowCheats] = useState(false);
     const [cheats, setCheats] = useState({
         delayProgress: false,
     });
@@ -72,13 +72,17 @@ const ReactionTime = () => {
     return (
         <>
             <NextSeo title="Reaction Time Test" />
-            <div className={styles.center}>
-                <div className={styles.container}>
+            <div className={defStyles.center}>
+                <div className={defStyles.container}>
                     <button
-                        className={classes([
-                            styles.click,
-                            gameState === 'CanClick' ? styles.active : null,
-                        ])}
+                        className={defStyles.bigButton}
+                        style={{
+                            backgroundColor:
+                                gameState === 'CanClick'
+                                    ? '#11d871'
+                                    : undefined,
+                            overflow: 'hidden',
+                        }}
                         onMouseDown={(e) => e.button === 0 && handleClick()}
                         tabIndex={-1}
                     >
@@ -119,37 +123,23 @@ const ReactionTime = () => {
                         )}
                     </button>
                 </div>
-                <div className={styles.container}>
-                    <h4
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 4,
-                            cursor: 'default',
-                        }}
-                        onClick={() => setShowCheats((v) => !v)}
-                    >
-                        {showCheats ? <BsChevronDown /> : <BsChevronRight />}{' '}
-                        Cheats
-                    </h4>
-                    {showCheats && (
-                        <div style={{ marginTop: 8 }}>
-                            <Checkbox
-                                checked={cheats.delayProgress}
-                                disabled={
-                                    gameState === 'Waiting' ||
-                                    gameState === 'CanClick'
-                                }
-                                onChange={({ currentTarget: t }) =>
-                                    setCheats((c) => ({
-                                        ...c,
-                                        delayProgress: t.checked,
-                                    }))
-                                }
-                                label="Show delay progress bar"
-                            />
-                        </div>
-                    )}
+                <div className={defStyles.container}>
+                    <Accordion label="Cheats">
+                        <Checkbox
+                            checked={cheats.delayProgress}
+                            disabled={
+                                gameState === 'Waiting' ||
+                                gameState === 'CanClick'
+                            }
+                            onChange={({ currentTarget: t }) =>
+                                setCheats((c) => ({
+                                    ...c,
+                                    delayProgress: t.checked,
+                                }))
+                            }
+                            label="Show delay progress bar"
+                        />
+                    </Accordion>
                 </div>
             </div>
         </>
